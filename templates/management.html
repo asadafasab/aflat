@@ -1,0 +1,36 @@
+{%extends "base.html" %} {%block head%} {%endblock%} {%block body %}
+<div class="user_list">
+    {% for user in data[0] %}
+    <div class="user" id="{{user.username}}">
+        {%if user.username != "admin"%}
+        <div class="delete_btn" onclick="deleteUser('{{user.username}}')">
+            <i class="fas fa-user-slash"></i> DELETE
+        </div>
+        {%endif%}
+        <div class="id">{{user.id}}</div>
+        <div class="username">{{user.username}}</div>
+    </div>
+    {%endfor%}
+</div>
+<div class="comments_management">
+    {%for comment in data[1]%}
+    <div class="username">
+        <b>{{comment.username}}</b> {{comment.date}}
+    </div>
+    <div class="content">
+        {{comment.content}}
+    </div>
+    {%endfor%}
+</div>
+
+<div class="generator">
+    <img id="generated_img" src="" alt="">
+    <div id="published" class="published"></div>
+    <div class="delete_btn" onclick="generate_image()">
+        GENERATE
+    </div>
+    <div class="delete_btn" onclick="add_new_image()">
+        PUBLISH
+    </div>
+</div>
+{% endblock %}

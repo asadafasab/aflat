@@ -1,0 +1,32 @@
+{%extends "base.html"%} {%block head %} {% endblock %} {%block body %}
+<div class="margin_menu"></div>
+<div class="container main">
+    <div class="paintings">
+        <div class="post_upper">
+            <div class="post_main">
+                <h2 class="post_title">{{data.title}}</h2>
+                <img class="post_pic" src="{{url_for('static',filename=data.filename)}}" alt="">
+                <div class="post_comments">
+                    {%if login%}
+                    <div class="new_comment">
+                        <textarea placeholder="Comment here..." name="" id="new_comment" cols="40" rows="2"></textarea>
+                        <button class="send_comment" onclick="postComment()">
+                            <i class="far fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    {%endif%}
+                    <div id="comments">
+                        {% for comment in comments %}
+                        <p class="comment_title"><b>{{comment.username}}</b> {{comment.date}}</p>
+                        <p class="comment_comment">{{comment.content}}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "popular.html" %}
+</div>
+
+
+{% endblock %}

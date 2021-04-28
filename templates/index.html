@@ -1,0 +1,41 @@
+{% extends "base.html" %} {%block head %} {% endblock %} {%block body %}
+<div class="container main">
+    <div class="paintings">
+        {% for painting in paintings %}
+        <div class="post_upper">
+            <div class="post_main">
+                <h2 class="post_title">{{painting.title}}</h2>
+                <a href="/painting?id={{painting.id}}">
+                    <img class="post_pic" src="{{url_for('static',filename=painting.filename)}}" alt="">
+                </a>
+                <div class="post_comments_preview">
+                    {%if current_user.is_authenticated%}
+                    {%if stonk(painting.id,current_user.username)%}
+                    <div onclick="stonks({{painting.id}})" class="stonks_btn_active" id="stonks_btn{{painting.id}}">
+                        {%else%}
+                        <div onclick="stonks({{painting.id}})" class="stonks_btn" id="stonks_btn{{painting.id}}">
+                            {%endif%}
+                            {%else%}
+                            <div onclick="stonks_login()" class="stonks_btn" id="stonks_btn{{painting.id}}">
+                                {%endif%}
+                                <i class="fas fa-chart-line fa-lg"></i> Stonks
+                            </div>
+                            <div>
+                                <i class="far fa-comments fa-lg"></i> {{painting.comments_num}} comment(s)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% include "popular.html" %} {{super()}}
+
+        </div>
+        <div class="pages">
+            {%if page!=1%}
+            <a class="change_page" href="/?page={{page-2}}"><i class="fas fa-arrow-left"></i></a>
+            {%endif%}
+            <div class="current_page">Page {{page}}</div>
+            <a class="change_page" href="/?page={{page}}"><i class="fas fa-arrow-right"></i></a>
+        </div>
+        {% endblock %}

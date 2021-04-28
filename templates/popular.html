@@ -1,0 +1,12 @@
+<div class="right_bar">
+    <h2 class="bar_title">Popular</h2>
+
+    {%for pop in popular%}
+    <a href="/painting?id={{pop.id}}">
+        <div class="popular_painting">
+            <img alt="" src="{{url_for('static',filename=pop.filename)}}">
+            <h4 class="popular_title">{{pop.title}}</h4>
+        </div>
+    </a>
+    {%endfor%}
+</div>

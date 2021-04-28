@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}" type="text/css">
+    <script src="https://kit.fontawesome.com/829b983fe9.js" crossorigin="anonymous"></script>
+    <script src="{{url_for('static',filename='js/main.js')}}"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="{{url_for('static',filename='pictures/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{url_for('static',filename='pictures/favicon-16x16.png')}}">
+    {% if title %}
+    <title>A flat - {{title}}</title>
+    {%else%}
+    <title>A flat</title>
+    {%endif%} {%block head %} {% endblock %}
+</head>
+
+<body>
+    <div class="wrapper">
+        <nav>
+            <div class="hamburger-box">
+                <div class="hamburger-inner"></div>
+            </div>
+
+            <input type="checkbox" class="hamburger-checker">
+            <ul>
+                <li><a class="navitem" href='/'>Home</a></li>
+                <li><a class="navitem" href='/about'>About</a></li>
+                {%if current_user.is_authenticated%} {%if current_user.username=="admin"%}
+                <li><a class="navitem" href='/management'>Management</a></li>
+                {%endif%}
+                <li><a class="navitem" href='/logout'>Log out</a></li>
+                <li>Hi {{ current_user.username }}</li>
+                {%else%}
+                <li><a class="navitem" href='/login'>Log in</a></li>
+                <li><a class="navitem" href='/signup'>Sign up</a></li>
+                {%endif%}
+            </ul>
+        </nav>
+
+        {%block body %} {% endblock %}
+    </div>
+    <footer>
+        <p>© 2021 Me <a href="https://github.com/asadafasab"><i class="fab fa-github"></i></a></p>
+        <p><a target="blank" class="koperek" href="https://youtu.be/3IX6jRta5Po">DON'T CLICK</a></p>
+    </footer>
+</body>
+
+</html>

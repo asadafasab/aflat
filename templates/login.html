@@ -1,0 +1,29 @@
+{%extends "base.html"%}
+
+{%block head %}
+{% endblock %}
+
+{%block body %}
+
+<div class="container">
+    <div class="login_page">
+        <form action="/login" method="POST">
+            <div class="login">
+                {% with messages = get_flashed_messages() %}
+                {% if messages%}
+                <div class="signup_error">
+                    {{messages[0]}}
+                </div>
+                {%endif%}
+                {%endwith%}
+                <input type="text" placeholder="Username" name="username" id="username">
+                <input type="password" placeholder="Password" name="password" id="password">
+                <a onclick="alert('your problem (:')" href="#" class="forgot">forgot password?</a>
+                <input type="submit" value="Login" id="signup_submit">
+            </div>
+        </form>
+
+
+    </div>
+</div>
+{% endblock %}
