@@ -11,21 +11,36 @@ noauth = Blueprint("main", __name__)
 @noauth.route("/home")
 def index():
     if "page" not in request.args:
-        return render_template("index.html", page=1,
-                               stonk=get_stonk, popular=popular_db(),
-                               paintings=paintings_db(), title="Home")
+        return render_template(
+            "index.html",
+            page=1,
+            stonk=get_stonk,
+            popular=popular_db(),
+            paintings=paintings_db(),
+            title="Home",
+        )
 
     try:
         page = int(request.args.get("page"))
     except:
-        return render_template("index.html", page=1, stonk=get_stonk,
-                               paintings=paintings_db(), title="Home")
+        return render_template(
+            "index.html",
+            page=1,
+            stonk=get_stonk,
+            paintings=paintings_db(),
+            title="Home",
+        )
 
-    count_pages = int(paintings_count()/5)
+    count_pages = int(paintings_count() / 5)
     if page > count_pages:
         page = count_pages
-    return render_template("index.html", page=page+1, stonk=get_stonk,
-                           paintings=paintings_db(page), title="Home")
+    return render_template(
+        "index.html",
+        page=page + 1,
+        stonk=get_stonk,
+        paintings=paintings_db(page),
+        title="Home",
+    )
 
 
 @noauth.route("/painting")
@@ -39,18 +54,20 @@ def painting():
     except:
         return redirect(url_for("main.index"))
 
-    return render_template("painting.html",
-                           popular=popular_db(),
-                           login=login,
-                           data=painting_db(id_),
-                           comments=comments(id_))
+    return render_template(
+        "painting.html",
+        popular=popular_db(),
+        login=login,
+        data=painting_db(id_),
+        comments=comments(id_),
+    )
 
 
-@ noauth.route("/about")
+@noauth.route("/about")
 def about():
     return render_template("about.html", title="About")
 
 
-@ noauth.route("/account")
+@noauth.route("/account")
 def account():
     return render_template("about.html", title="Account")

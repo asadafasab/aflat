@@ -18,30 +18,30 @@
 </head>
 
 <body>
-    <div class="wrapper">
-        <nav>
-            <div class="hamburger-box">
-                <div class="hamburger-inner"></div>
-            </div>
+    <nav>
+        <div class="hamburger-box">
+            <div class="hamburger-inner"></div>
+        </div>
 
-            <input type="checkbox" class="hamburger-checker">
-            <ul>
-                <li><a class="navitem" href='/'>Home</a></li>
-                <li><a class="navitem" href='/about'>About</a></li>
-                {%if current_user.is_authenticated%} {%if current_user.username=="admin"%}
-                <li><a class="navitem" href='/management'>Management</a></li>
-                {%endif%}
-                <li><a class="navitem" href='/logout'>Log out</a></li>
-                <li>Hi {{ current_user.username }}</li>
-                {%else%}
-                <li><a class="navitem" href='/login'>Log in</a></li>
-                <li><a class="navitem" href='/signup'>Sign up</a></li>
-                {%endif%}
-            </ul>
-        </nav>
+        <input type="checkbox" class="hamburger-checker">
+        <ul>
+            <li><a class="navitem" href='/'>Home</a></li>
+            <li><a class="navitem" href='/about'>About</a></li>
+            {%if current_user.is_authenticated%} {%if current_user.username=="admin"%}
+            <li><a class="navitem" href='/management'>Management</a></li>
+            {%endif%}
+            <li><a href="/new" class="navitem">New post</a></li>
+            <li><a class="navitem" href='/logout'>Log out</a></li>
+            <li><a class="username navitem">Hi {{ current_user.username }}</a>
+            </li>
+            {%else%}
+            <li><a class="navitem" href='/login'>Log in</a></li>
+            <li><a class="navitem" href='/signup'>Sign up</a></li>
+            {%endif%}
+        </ul>
+    </nav>
 
-        {%block body %} {% endblock %}
-    </div>
+    {%block body %} {% endblock %}
     <footer>
         <p>© 2021 Me <a href="https://github.com/asadafasab"><i class="fab fa-github"></i></a></p>
         <p><a target="blank" class="koperek" href="https://youtu.be/3IX6jRta5Po">DON'T CLICK</a></p>

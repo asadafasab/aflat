@@ -2,7 +2,13 @@ from flask import Blueprint, request, jsonify, render_template, url_for, redirec
 from flask_login import login_required, current_user, login_user, logout_user
 
 from aflat.models import User, Comment
-from aflat.data import users_comments, new_painting, publish_painting, stonks_db, popular_db
+from aflat.data import (
+    users_comments,
+    new_painting,
+    publish_painting,
+    stonks_db,
+    popular_db,
+)
 from aflat.main import db
 
 auth = Blueprint("auth", __name__)
@@ -33,7 +39,7 @@ def signup():
     return render_template("signup.html")
 
 
-@auth.route('/signup', methods=["POST"])
+@auth.route("/signup", methods=["POST"])
 def signup_():
     username = request.form.get("username")
     password = request.form.get("password")
@@ -51,7 +57,7 @@ def signup_():
     return redirect(url_for("auth.login"))
 
 
-@auth.route('/login', methods=["POST"])
+@auth.route("/login", methods=["POST"])
 def login_():
     username = request.form.get("username")
     password = request.form.get("password")
@@ -65,18 +71,20 @@ def login_():
     return redirect(url_for("main.index"))
 
 
-@auth.route('/logout')
+@auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for("main.index"))
 
 
 @auth.route("/management")
 @login_required
 def management():
     if current_user.username == "admin":
-        return render_template("management.html", data=users_comments(), title="Admin panel")
+        return render_template(
+            "management.html", data=users_comments(), title="Admin panel"
+        )
     return redirect(url_for("main.index"))
 
 
@@ -117,3 +125,15 @@ def stonks():
 
     stonks_db(id_, current_user.username)
     return {"ok": True}
+
+
+@auth.route("/new")
+@login_required
+def new_post():
+    return render_template("new.html")
+
+
+@auth.route("/new", methods=["POST"])
+@login_required
+def post_new_post():
+    return render_template("new.html")

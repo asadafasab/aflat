@@ -76,16 +76,16 @@ window.addEventListener('load', function () {
 let checkSignupForm = () => {
     if (inputs[0].value == "") {
         messages[0].innerHTML = "Empty username"
-        inputs[4].disabled = true
+        inputs[3].disabled = true
     } else {
-        inputs[4].disabled = false
+        inputs[3].disabled = false
         messages[0].innerHTML = ""
     }
     if (inputs[1].value && inputs[2].value && inputs[1].value === inputs[2].value) {
         messages[1].innerHTML = ""
-        inputs[4].disabled = false
+        inputs[3].disabled = false
     } else {
-        inputs[4].disabled = true
+        inputs[3].disabled = true
         messages[1].innerHTML = "Check passwords"
 
     }
@@ -134,4 +134,10 @@ let stonks = (id) => {
 }
 let stonks_login = () => {
     alert("to do this you must login")
+}
+
+
+
+let loadImage = () => {
+    console.log("hmmmm")
 }

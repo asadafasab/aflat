@@ -18,10 +18,6 @@
                 <div class="signup_error" id="same_password">
 
                 </div>
-                <div class="code2fa">
-                    Use 2fa code
-                    <input type="checkbox" name="check_2fa_code" id="check_2fa_code">
-                </div>
                 {% with messages = get_flashed_messages() %}
                 {% if messages%}
                 <div class="signup_error big_font">
@@ -29,7 +25,7 @@
                 </div>
                 {%endif%}
                 {%endwith%}
-                <input id="signup_submit" class="submit_btn" type="submit" value="Sign In" disabled>
+                <input id="signup_submit" class="signin_btn" type="submit" value="Sign In" disabled>
             </div>
         </form>
     </div>

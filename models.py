@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
         return False
 
     @property
-    def passwd():
+    def passwd(self):
         return self.password
 
     @passwd.setter

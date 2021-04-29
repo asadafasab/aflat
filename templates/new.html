@@ -1,0 +1,19 @@
+{%extends "base.html"%}
+
+{%block body%}
+<div class="container">
+    <div class="mobile_margin">
+        <div class="new_post">
+            New post
+            <form class="new_post_form" action="/publish_by_user" method="POST">
+                <input class="new_post_item" type="text" placeholder="title">
+                <div class="img_placeholder" onclick="loadImage()">
+                    <p>Click to<br>upload image</p>
+                    <img src="" alt="">
+                </div>
+                <input class="new_post_btn new_post_item" type="submit" value="PUBLISH">
+            </form>
+        </div>
+    </div>
+</div>
+{%endblock%}
