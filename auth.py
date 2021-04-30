@@ -6,8 +6,9 @@ from aflat.data import (
     users_comments,
     new_painting,
     publish_painting,
-    stonks_db,
+    publish_post,
     popular_db,
+    stonks_db,
 )
 from aflat.main import db
 
@@ -136,4 +137,6 @@ def new_post():
 @auth.route("/new", methods=["POST"])
 @login_required
 def post_new_post():
-    return render_template("new.html")
+    if publish_post():
+        return redirect(url_for("main.index"))
+    return redirect(url_for("auth.new_post"))

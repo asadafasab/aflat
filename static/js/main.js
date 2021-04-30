@@ -138,6 +138,10 @@ let stonks_login = () => {
 
 
 
-let loadImage = () => {
-    console.log("hmmmm")
+let loadImage = (event) => {
+    let output = document.getElementById('upload_image');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = () => {
+        URL.revokeObjectURL(output.src) // free memory
+    }
 }

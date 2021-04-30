@@ -5,6 +5,8 @@ from flask_login import UserMixin
 
 from aflat.main import db
 
+# TODO relationships (?)
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -5,12 +5,22 @@
     <div class="mobile_margin">
         <div class="new_post">
             New post
-            <form class="new_post_form" action="/publish_by_user" method="POST">
-                <input class="new_post_item" type="text" placeholder="title">
-                <div class="img_placeholder" onclick="loadImage()">
-                    <p>Click to<br>upload image</p>
-                    <img src="" alt="">
-                </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages%}
+            <div class="signup_error">
+                {{messages[0]}}
+            </div>
+            {%endif%}
+            {%endwith%}
+            <form class="new_post_form" action="/new" method="POST" enctype=multipart/form-data>
+                <input class="new_post_item" type="text" name="title" placeholder="Title">
+
+                <label class="custom-file-upload">
+                    <input name="image" type="file" accept="image/*" onchange="loadImage(event)" />
+                    Upload Image
+                </label>
+
+                <img id="upload_image" src="" alt="" class="img_placeholder">
                 <input class="new_post_btn new_post_item" type="submit" value="PUBLISH">
             </form>
         </div>

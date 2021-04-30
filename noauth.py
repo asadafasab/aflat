@@ -27,6 +27,7 @@ def index():
             "index.html",
             page=1,
             stonk=get_stonk,
+            popular=popular_db(),
             paintings=paintings_db(),
             title="Home",
         )
@@ -38,6 +39,7 @@ def index():
         "index.html",
         page=page + 1,
         stonk=get_stonk,
+        popular=popular_db(),
         paintings=paintings_db(page),
         title="Home",
     )

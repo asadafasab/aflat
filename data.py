@@ -1,9 +1,13 @@
 import os
 import torch
 import random
+from hashlib import md5
 import matplotlib.pyplot as plt
 from typing import List, Dict
+
+from flask import request, flash
 from sqlalchemy import desc, func
+from werkzeug.utils import secure_filename
 
 from aflat.nn import Generator
 from aflat.main import db
@@ -12,11 +16,10 @@ from aflat.models import *
 
 gen = Generator(512, 512)
 gen.load_state_dict(
-    torch.load("./gan/generator.pth",
-               map_location=torch.device("cpu"))["state_dict"]
+    torch.load("./gan/generator.pth", map_location=torch.device("cpu"))["state_dict"]
 )
 
-titles = [
+TITLES = [
     "Painting in case of a zombie apocalypse",
     "Paintings technique that changed my life forever",
     "Paintings frying around",
@@ -32,6 +35,8 @@ titles = [
     "The prehistoric painting",
     "Zombie painting is better than sleeping",
 ]
+EXTENSIONS = ["png", "jpg", "jpeg", "git", "avif"]
+POSTS_PATH = "./static/generated/"
 
 
 def comments(id_: int) -> List[Dict]:
@@ -66,9 +71,8 @@ def users_comments():  # TODO
 
 
 def paintings_db(page=0) -> Dict:
-    # TODO query 5 posts
     start = page * 5
-    posts = Post.query.order_by(desc(Post.id))[start: start + 5]
+    posts = Post.query.order_by(desc(Post.id))[start : start + 5]
 
     posts_json = []
     for post in posts:
@@ -104,18 +108,55 @@ def new_painting():
 def publish_painting():
     post = Post.query.order_by(Post.id.desc()).first()
     if post:
-        os.rename("./static/generated/tmp.jpg",
-                  f"./static/generated/{post.id+1}.jpg")
+        os.rename("./static/generated/tmp.jpg", f"./static/generated/{post.id+1}.jpg")
         new_post = Post(
-            title=random.choice(titles), picture_filename=f"/generated/{post.id+1}.jpg"
+            title=random.choice(TITLES), picture_filename=f"/generated/{post.id+1}.jpg"
         )
     else:
         os.rename("./static/generated/tmp.jpg", "./static/generated/1.jpg")
         new_post = Post(
-            title=random.choice(titles), picture_filename="/generated/1.jpg"
+            title=random.choice(TITLES), picture_filename="/generated/1.jpg"
         )
     db.session.add(new_post)
     db.session.commit()
+
+
+def check_extension(fn):
+    return fn.split(".")[-1] in EXTENSIONS
+
+
+def new_filename(fn, file):
+    extension = "." + fn.split(".")[-1]
+    return md5(file).hexdigest() + extension
+
+
+def publish_post():
+    title = request.form.get("title")
+    if title == "":
+        flash("No title!")
+        return False
+    if "image" not in request.files:
+        flash("No image")
+        return False
+    file = request.files["image"]
+
+    if file.filename == "":
+        flash("No image")
+        return False
+    if check_extension(file.filename):
+        filename = secure_filename(file.filename)
+        filename = new_filename(filename, file.stream.read())
+        path = os.path.join(POSTS_PATH, filename)
+        file.stream.seek(0)
+        file.save(path)
+
+        new_post = Post(title=title, picture_filename="generated/" + filename)
+        db.session.add(new_post)
+        db.session.commit()
+        return True
+
+    flash("Wrong file!")
+    return False
 
 
 def stonks_db(id_, username):
@@ -139,8 +180,7 @@ def get_stonk(id_, username):
 
 def popular_db():
     popular = (
-        PostScore.query.with_entities(
-            PostScore.post_id, func.count(PostScore.post_id))
+        PostScore.query.with_entities(PostScore.post_id, func.count(PostScore.post_id))
         .group_by(PostScore.post_id)
         .all()
     )
@@ -151,4 +191,5 @@ def popular_db():
         popular_json.append(
             {"id": post[0], "title": p.title, "filename": p.picture_filename}
         )
+    print(popular_json, "\n\n\n")
     return popular_json

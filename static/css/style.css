@@ -114,6 +114,23 @@ footer {
 ----------------------
 */
 
+.empty {
+    margin: 2rem;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 100;
+    color: var(--hmmm);
+    padding: 1rem;
+    width: 366px;
+    justify-content: center;
+    align-items: center;
+}
+
+#nothing {
+    color: var(--hmmm);
+    cursor: progress;
+}
+
 .username {
     color: var(--font) !important;
     background: transparent !important;
@@ -208,23 +225,40 @@ footer {
     margin-top: 1rem;
     border: 4px dashed var(--alternative);
     border-radius: 1rem;
-    width: 16.5rem;
+    width: 16rem;
     height: 17rem;
     display: flex;
     align-items: center;
     justify-content: center;
     clear: both;
     font-size: 20px;
+    max-width: 16.5rem;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 2px solid var(--alternative);
+    border-radius: 1rem;
+    display: inline-block;
+    padding: 0.7rem;
+    font-size: 16px;
+    width: 16rem;
+    margin-top: 1rem;
     cursor: pointer;
 }
 
 .new_post_btn {
+    width: 16rem;
     border-radius: 1rem;
     border: 2px solid var(--alternative);
     background: transparent;
     padding: 0.5rem 1rem;
     margin: 1.5rem 0 0.2rem 0;
     font-size: 22px;
+    cursor: pointer;
 }
 
 @media (max-width: 570px) {
@@ -342,6 +376,7 @@ input[type="password"]:focus, input[type="text"]:focus {
 .signup_error {
     text-align: center;
     color: var(--alternative);
+    font-size: 16px;
 }
 
 .signin_btn {
