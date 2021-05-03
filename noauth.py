@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user
-from aflat.main import db
 from aflat.data import *
 from aflat.models import User, Comment
 

@@ -50,7 +50,7 @@ def comments(id_: int) -> List[Dict]:
     return comments_json
 
 
-def users_comments():  # TODO
+def users_comments():
     users = User.query.all()
     users_json = []
     for user in users:
@@ -130,6 +130,16 @@ def new_filename(fn, file):
     return md5(file).hexdigest() + extension
 
 
+def generated_directory():
+    if os.path.isdir("./static/generated/"):
+        return True
+    try:
+        os.mkdir("./static/generated")
+    except:
+        return False
+    return True
+
+
 def publish_post():
     title = request.form.get("title")
     if title == "":
@@ -147,6 +157,11 @@ def publish_post():
         filename = secure_filename(file.filename)
         filename = new_filename(filename, file.stream.read())
         path = os.path.join(POSTS_PATH, filename)
+
+        if not generated_directory():
+            flash("Hmmm error or smth....")
+            return False
+
         file.stream.seek(0)
         file.save(path)
 
@@ -174,8 +189,7 @@ def get_stonk(id_, username):
     stonk = PostScore.query.filter_by(username=username, post_id=id_).first()
     if stonk:
         return True
-    else:
-        return False
+    return False
 
 
 def popular_db():
@@ -191,5 +205,4 @@ def popular_db():
         popular_json.append(
             {"id": post[0], "title": p.title, "filename": p.picture_filename}
         )
-    print(popular_json, "\n\n\n")
     return popular_json

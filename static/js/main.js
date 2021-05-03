@@ -1,4 +1,8 @@
-const domain = "http://192.168.1.5:5000"
+const protocol = window.location.protocol;
+const domain1 = window.location.hostname;
+const port = window.location.port;
+
+const domain = `${protocol}//${domain1}:${port? port : ""}`
 
 let getData = (url) => {
     return fetch(url).then(res => {
