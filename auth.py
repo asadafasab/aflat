@@ -1,13 +1,13 @@
 from flask import Blueprint, request, jsonify, render_template, url_for, redirect, flash
 from flask_login import login_required, current_user, login_user, logout_user
 
-from aflat.models import User, Comment
+from aflat.models import User, Comment, Post
 from aflat.data import (
-    users_comments,
+    users_comments_data,
     new_painting,
     publish_painting,
     publish_post,
-    popular_db,
+    popular_data,
     stonks_db,
 )
 from aflat.main import db
@@ -17,14 +17,18 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/comment", methods=["POST"])
 @login_required
-def comment():
+def add_comment():
     comment = request.json
-    user = current_user.username
+    username = current_user.username
     content = comment["comment"]
-    if not content:
-        return jsonify({"ok": False})
     id_ = comment["id"]
-    new_comment = Comment(username=user, content=content, post_id=id_)
+    if not content or not id_:
+        return jsonify({"ok": False})
+
+    user = User.query.filter_by(username=username).first()
+    post = Post.query.filter_by(id=id_).first()
+    new_comment = Comment(user_comment=user, content=content, post_comment=post)
+
     db.session.add(new_comment)
     db.session.commit()
     return jsonify({"ok": True})
@@ -84,7 +88,7 @@ def logout():
 def management():
     if current_user.username == "admin":
         return render_template(
-            "management.html", data=users_comments(), title="Admin panel"
+            "management.html", data=users_comments_data(), title="Admin panel"
         )
     return redirect(url_for("main.index"))
 
@@ -118,7 +122,6 @@ def publish_image():
 @auth.route("/stonks", methods=["POST"])
 @login_required
 def stonks():
-    print(popular_db())
     try:
         id_ = int(request.json["post_id"])
     except:

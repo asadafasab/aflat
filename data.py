@@ -1,17 +1,18 @@
+from typing import List, Dict
+from hashlib import md5
+import random
 import os
 import torch
-import random
-from hashlib import md5
 import matplotlib.pyplot as plt
-from typing import List, Dict
 
 from flask import request, flash
+from flask_login import current_user
 from sqlalchemy import desc, func
 from werkzeug.utils import secure_filename
 
 from aflat.nn import Generator
 from aflat.main import db
-from aflat.models import *
+from aflat.models import User, Comment, Post, PostScore
 
 
 gen = Generator(512, 512)
@@ -39,21 +40,25 @@ EXTENSIONS = ["png", "jpg", "jpeg", "git", "avif"]
 POSTS_PATH = "./static/generated/"
 
 
-def comments(id_: int) -> List[Dict]:
+def comments_data(id_: int) -> List[Dict]:
     comments_json = []
     comments = Comment.query.filter_by(post_id=id_).all()
 
-    for c in reversed(comments):
+    for com in reversed(comments):
         comments_json.append(
-            {"username": c.username, "date": c.date, "content": c.content}
+            {
+                "username": User.query.filter_by(id=com.user_id).first().username,
+                "date": com.date,
+                "content": com.content,
+            }
         )
     return comments_json
 
 
-def users_comments():
-    users = User.query.all()
+def users_comments_data():
+    users = User.query
     users_json = []
-    for user in users:
+    for user in users.all():
         users_json.append({"id": user.id, "username": user.username})
 
     comments = Comment.query.all()
@@ -63,14 +68,14 @@ def users_comments():
             {
                 "date": comment.date,
                 "post_id": comment.post_id,
-                "username": comment.username,
+                "username": users.filter_by(id=comment.user_id).first().username,
                 "content": comment.content,
             }
         )
     return [users_json, comments_json]
 
 
-def paintings_db(page=0) -> Dict:
+def paintings_data(page=0) -> Dict:
     start = page * 5
     posts = Post.query.order_by(desc(Post.id))[start : start + 5]
 
@@ -88,11 +93,11 @@ def paintings_db(page=0) -> Dict:
     return posts_json
 
 
-def paintings_count():
+def paintings_count_data():
     return Post.query.count()
 
 
-def painting_db(id_) -> Dict:
+def painting_data(id_) -> Dict:
     post = Post.query.get(id_)
     return {"id": post.id, "title": post.title, "filename": post.picture_filename}
 
@@ -107,15 +112,20 @@ def new_painting():
 
 def publish_painting():
     post = Post.query.order_by(Post.id.desc()).first()
+    user = User.query.filter_by(username=current_user.username).first()
     if post:
         os.rename("./static/generated/tmp.jpg", f"./static/generated/{post.id+1}.jpg")
         new_post = Post(
-            title=random.choice(TITLES), picture_filename=f"/generated/{post.id+1}.jpg"
+            title=random.choice(TITLES),
+            picture_filename=f"/generated/{post.id+1}.jpg",
+            user_post=user,
         )
     else:
         os.rename("./static/generated/tmp.jpg", "./static/generated/1.jpg")
         new_post = Post(
-            title=random.choice(TITLES), picture_filename="/generated/1.jpg"
+            title=random.choice(TITLES),
+            picture_filename="/generated/1.jpg",
+            user_post=user,
         )
     db.session.add(new_post)
     db.session.commit()
@@ -165,7 +175,10 @@ def publish_post():
         file.stream.seek(0)
         file.save(path)
 
-        new_post = Post(title=title, picture_filename="generated/" + filename)
+        user = User.query.filter_by(username=current_user.username).first()
+        new_post = Post(
+            title=title, picture_filename="generated/" + filename, user_post=user
+        )
         db.session.add(new_post)
         db.session.commit()
         return True
@@ -175,9 +188,10 @@ def publish_post():
 
 
 def stonks_db(id_, username):
-    stonk = PostScore.query.filter_by(username=username, post_id=id_).first()
+    user = User.query.filter_by(username=current_user.username).first()
+    stonk = PostScore.query.filter_by(post_score=user, post_id=id_).first()
     if not stonk:
-        new_stonk = PostScore(username=username, post_id=id_)
+        new_stonk = PostScore(user_stonk=user, post_id=id_)
         db.session.add(new_stonk)
         db.session.commit()
     else:
@@ -186,13 +200,16 @@ def stonks_db(id_, username):
 
 
 def get_stonk(id_, username):
-    stonk = PostScore.query.filter_by(username=username, post_id=id_).first()
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return False
+    stonk = PostScore.query.filter_by(user_id=user.id, post_id=id_).first()
     if stonk:
         return True
     return False
 
 
-def popular_db():
+def popular_data():
     popular = (
         PostScore.query.with_entities(PostScore.post_id, func.count(PostScore.post_id))
         .group_by(PostScore.post_id)

@@ -1,6 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user
-from aflat.data import *
+from aflat.data import (
+    comments_data,
+    popular_data,
+    painting_data,
+    paintings_data,
+    get_stonk,
+    paintings_count_data,
+)
 from aflat.models import User, Comment
 
 noauth = Blueprint("main", __name__)
@@ -14,8 +21,8 @@ def index():
             "index.html",
             page=1,
             stonk=get_stonk,
-            popular=popular_db(),
-            paintings=paintings_db(),
+            popular=popular_data(),
+            paintings=paintings_data(),
             title="Home",
         )
 
@@ -26,20 +33,20 @@ def index():
             "index.html",
             page=1,
             stonk=get_stonk,
-            popular=popular_db(),
-            paintings=paintings_db(),
+            popular=popular_data(),
+            paintings=paintings_data(),
             title="Home",
         )
 
-    count_pages = int(paintings_count() / 5)
+    count_pages = int(paintings_count_data() / 5)
     if page > count_pages:
         page = count_pages
     return render_template(
         "index.html",
         page=page + 1,
         stonk=get_stonk,
-        popular=popular_db(),
-        paintings=paintings_db(page),
+        popular=popular_data(),
+        paintings=paintings_data(page),
         title="Home",
     )
 
@@ -57,10 +64,10 @@ def painting():
 
     return render_template(
         "painting.html",
-        popular=popular_db(),
+        popular=popular_data(),
         login=login,
-        data=painting_db(id_),
-        comments=comments(id_),
+        data=painting_data(id_),
+        comments=comments_data(id_),
     )
 
 
