@@ -4,26 +4,65 @@
 {% endblock %}
 
 {%block body %}
-
-<div class="container">
-    <div class="login_page">
-        <form action="/login" method="POST">
-            <div class="login">
+<div class="is-flex-direction-row is-flex is-justify-content-center">
+    <div class="columns is-centered has-text-centered">
+        <form action="/login" method="POST" class="has-background-white login">
+            <div class="column">
+                <h1 class="title">Login</h1>
+            </div>
+            <div class="column has-text-danger">
                 {% with messages = get_flashed_messages() %}
                 {% if messages%}
-                <div class="signup_error">
-                    {{messages[0]}}
-                </div>
+                {{messages[0]}}
                 {%endif%}
                 {%endwith%}
-                <input type="text" placeholder="Username" name="username" id="username">
-                <input type="password" placeholder="Password" name="password" id="password">
-                <a onclick="alert('your problem (:')" href="#" class="forgot">forgot password?</a>
-                <input class="signin_btn" type="submit" value="Login" id="signup_submit">
+            </div>
+            <div class="column">
+                <input class="input" type="text" placeholder="Username" name="username" id="username">
+            </div>
+            <div class="column">
+                <input class="input" type="password" placeholder="Password" name="password" id="password">
+            </div>
+            <div class="column">
+                <a onclick="alert('your problem (:')" href="#" class="tag">forgot password?</a>
+            </div>
+            <div class="column">
+                <input class="button is-medium is-fullwidth" type="submit" value="Login" id="signup_submit">
             </div>
         </form>
+    </div>
 
 
+    <div class="columns is-centered has-text-centered">
+        <form id="signup_form" action="/signup" method="POST" class="has-background-white login">
+            <div class="column">
+                <h1 class="title">Sign up</h1>
+            </div>
+            <div class="column">
+                <input class="input" type="text" placeholder="Username" name="username" id="username_signup">
+            </div>
+            <div class="column">
+                <input class="input" type="text" placeholder="Username" name="username" id="username_signup">
+            </div>
+            <div class="column">
+                <input class="input" type="password" placeholder="Password" name="password" id="password_signup1"
+                    onchange="checkSignupForm()">
+            </div>
+            <div class="column">
+                <input class="input" type="password" placeholder="Repeat Password" id="password_signup2"
+                    onchange="checkSignupForm()">
+            </div>
+            <div class="column has-text-danger">
+                {% with messages = get_flashed_messages() %}
+                {% if messages%}
+                {{messages[0]}}
+                {%endif%}
+                {%endwith%}
+            </div>
+            <div class="column">
+                <input id="signup_submit" class="button is-medium is-fullwidth" type="submit" value="Sign In" disabled>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

@@ -2,7 +2,7 @@ const protocol = window.location.protocol;
 const domain1 = window.location.hostname;
 const port = window.location.port;
 
-const domain = `${protocol}//${domain1}:${port? port : ""}`
+const domain = `${protocol}//${domain1}:${port ? port : ""}`
 
 let getData = (url) => {
     return fetch(url).then(res => {
@@ -68,6 +68,15 @@ let deleteUser = (username) => {
     })
 }
 
+//burger menu
+const burger = document.querySelector("#burger")
+const navbarMenu = document.querySelector("#nav-menu")
+console.log(burger, navbarMenu)
+burger.addEventListener("click", () => {
+    navbarMenu.classList.toggle("is-active")
+})
+
+
 
 let inputs
 let messages
@@ -102,7 +111,6 @@ let generate_image = () => {
         new_image.src = res.path + "?" + new Date().getTime()
         message.innerHTML = ""
     })
-
 }
 
 
@@ -116,31 +124,19 @@ let add_new_image = () => {
 }
 
 let stonks = (id) => {
-    let btn = document.getElementById("stonks_btn" + id)
+    let btn = document.getElementById("stonk" + id)
 
     sendData(domain + "/stonks", {
         post_id: id
     }).then(res => {
         if (res.ok) {
-            if (btn.classList.contains("stonks_btn")) {
-                btn.classList.remove("stonks_btn")
-                btn.classList.add("stonks_btn_active")
-                alert("congrats you've stonked this painting")
-                //TODO pop up
-            } else {
-                btn.classList.add("stonks_btn")
-                btn.classList.remove("stonks_btn_active")
-            }
+            alert("congrats you've stonked this painting")
+            btn.classList.toggle("stonk-active")
         } else {
             alert("something went wrong...")
         }
     })
 }
-let stonks_login = () => {
-    alert("to do this you must login")
-}
-
-
 
 let loadImage = (event) => {
     let output = document.getElementById('upload_image');

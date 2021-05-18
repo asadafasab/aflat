@@ -1,56 +1,69 @@
 {% extends "base.html" %} {%block head %} {% endblock %} {%block body %}
-<div class="container">
-    <div class="paintings">
-        {%if not paintings%}
-        <div class="post_upper">
-            <div class="post_main">
-                <div class="empty">
-                    <h2>nothing</h2>
-                    <p>There's nothing here.</p>
-                    <p>There's <a id="nothing" href="http://localhost:8080">nothing</a> here.</p>
-                    <p>There's nothing here.</p>
-                    <p>There's nothing here.</p>
-                </div>
-            </div>
+{%if not paintings%}
+<div class="post_upper">
+    <div class="post_main">
+        <div class="empty">
+            <h2>nothing</h2>
+            <p>There's nothing here.</p>
+            <p>There's <a id="nothing" href="http://localhost:8080">nothing</a> here.</p>
+            <p>There's nothing here.</p>
+            <p>There's nothing here.</p>
         </div>
-        {%endif%}
+    </div>
+</div>
+{%endif%}
+<div class="columns">
+    <div class="is-two-thirds">
         {% for painting in paintings %}
-        <div class="post_upper">
-            <div class="post_main">
-                <h2 class="post_title">{{painting.title}}</h2>
+        <div class='column'>
+            <div class='card equal-height'>
                 <a href="/painting?id={{painting.id}}">
-                    <img class="post_pic" src="{{url_for('static',filename=painting.filename)}}" alt="">
+                    <div class='card-content'>
+                        <h3 class="title is-3">{{painting.title}}</h3>
+                    </div>
+                    <div class='card-content'>
+                        <img class="post-image" src="{{url_for('static',filename=painting.filename)}}" alt="">
+                    </div>
                 </a>
-                <div class="post_comments_preview">
-                    {%if current_user.is_authenticated%}
-                    {%if stonk(painting.id,current_user.username)%}
-                    <div onclick="stonks({{painting.id}})" class="stonks_btn_active" id="stonks_btn{{painting.id}}">
-                        {%else%}
-                        <div onclick="stonks({{painting.id}})" class="stonks_btn" id="stonks_btn{{painting.id}}">
-                            {%endif%}
-                            {%else%}
-                            <div onclick="stonks_login()" class="stonks_btn" id="stonks_btn{{painting.id}}">
-                                {%endif%}
+                <div class='card-content'>
+                    <div class="level">
+                        {%if current_user.is_authenticated%}
+                        {%if stonk(painting.id,current_user.username)%}
+                        <div class="level-item stonk stonk-active" onclick="stonks({{painting.id}})"
+                            id="stonk{{painting.id}}">
+                            <h5 class="title is-5">
                                 <i class="fas fa-chart-line fa-lg"></i> Stonks
-                            </div>
-                            <div>
-                                <i class="far fa-comments fa-lg"></i> {{painting.comments_num}} comment(s)
-                            </div>
+                            </h5>
+                        </div>
+                        {%else%}
+                        <div class="level-item stonk" onclick="stonks({{painting.id}})">
+                            <h5 class="title is-5">
+                                <i class="fas fa-chart-line fa-lg"></i> Stonks
+                            </h5>
+                        </div>
+                        {%endif%}
+                        {%endif%}
+                        <div class="level-item">
+                            <h5 class="title is-5"><i class="far fa-comments fa-lg"></i> {{painting.comments_num}}
+                                comment(s)
+                            </h5>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-            {% include "popular.html" %} {{super()}}
+        </div>
 
-        </div>
-        {%if paintings%}
-        <div class="pages">
-            {%if page!=1%}
-            <a class="change_page" href="/?page={{page-2}}"><i class="fas fa-arrow-left"></i></a>
-            {%endif%}
-            <div class="current_page">Page {{page}}</div>
-            <a class="change_page" href="/?page={{page}}"><i class="fas fa-arrow-right"></i></a>
-        </div>
-        {%endif%}
-        {% endblock %}
+        {% endfor %}
+    </div>
+    {% include "popular.html" %} {{super()}}
+</div>
+{%if paintings%}
+<div class="pages">
+    {%if page!=1%}
+    <a class="change_page" href="/?page={{page-2}}"><i class="fas fa-arrow-left"></i></a>
+    {%endif%}
+    <div class="current_page">Page {{page}}</div>
+    <a class="change_page" href="/?page={{page}}"><i class="fas fa-arrow-right"></i></a>
+</div>
+{%endif%}
+{% endblock %}

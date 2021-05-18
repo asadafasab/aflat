@@ -1,11 +1,39 @@
 {%extends "base.html"%} {%block head %} {% endblock %} {%block body %}
+<div class="columns mt-1">
+    <div class="is-two-thirds">
+        <div class='card equal-height'>
+            <div class='card-content'>
+                <h3 class="title is-3">{{data.title}}</h3>
+            </div>
+            <div class='card-content'>
+                <img class="post-image" src="{{url_for('static',filename=data.filename)}}" alt="">
+            </div>
+            {%if login%}
+            <div class="card-content is-flex">
+                <div class="">
+                </div>
+                <textarea class="textarea" style="width: 90% !important;min-width: 90% !important;"
+                    placeholder="Comment here..." name="" id="new_comment"></textarea>
+                <button class="button ml-4" onclick="postComment()">
+                    <i class="far fa-paper-plane"></i>
+                </button>
+            </div>
+            {%endif%}
+        </div>
+    </div>
+    {% include "popular.html" %}
+</div>
+
+
+
+
+
 <div class="margin_menu"></div>
 <div class="container main">
     <div class="paintings">
         <div class="post_upper">
             <div class="post_main">
                 <h2 class="post_title">{{data.title}}</h2>
-                <img class="post_pic" src="{{url_for('static',filename=data.filename)}}" alt="">
                 <div class="post_comments">
                     {%if login%}
                     <div class="new_comment">
@@ -25,7 +53,7 @@
             </div>
         </div>
     </div>
-    {% include "popular.html" %}
+    
 </div>
 
 

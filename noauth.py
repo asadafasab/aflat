@@ -8,7 +8,6 @@ from aflat.data import (
     get_stonk,
     paintings_count_data,
 )
-from aflat.models import User, Comment
 
 noauth = Blueprint("main", __name__)
 
