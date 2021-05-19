@@ -1,21 +1,25 @@
 {% extends "base.html" %} {%block head %} {% endblock %} {%block body %}
 {%if not paintings%}
-<div class="post_upper">
-    <div class="post_main">
-        <div class="empty">
-            <h2>nothing</h2>
-            <p>There's nothing here.</p>
-            <p>There's <a id="nothing" href="http://localhost:8080">nothing</a> here.</p>
-            <p>There's nothing here.</p>
-            <p>There's nothing here.</p>
+<div class="columns">
+    <div class="column">
+        <div class='card equal-height round p-4 has-text-centered'>
+            <h2 class="title mb-6">nothing</h2>
+            <p class="subtitle mb-0">There's nothing here.</p>
+            <p class="subtitle mb-0">There's <a id="nothing"
+                    href="http://localhost:8080?q=68656c6c6f207468657265">nothing</a> here.</p>
+            <p class="subtitle mb-0">There's nothing here.</p>
+            <p class="subtitle mb-0">There's nothing here.</p>
         </div>
     </div>
+</div>
+<div class="car">
+
 </div>
 {%endif%}
 <div class="columns">
     <div class="is-two-thirds">
         {% for painting in paintings %}
-        <div class='column'>
+        <div class='column round'>
             <div class='card equal-height'>
                 <a href="/painting?id={{painting.id}}">
                     <div class='card-content'>
@@ -29,14 +33,14 @@
                     <div class="level">
                         {%if current_user.is_authenticated%}
                         {%if stonk(painting.id,current_user.username)%}
-                        <div class="level-item stonk stonk-active" onclick="stonks({{painting.id}})"
+                        <div class="level-item round stonk stonk-active" onclick="stonks({{painting.id}})"
                             id="stonk{{painting.id}}">
                             <h5 class="title is-5">
                                 <i class="fas fa-chart-line fa-lg"></i> Stonks
                             </h5>
                         </div>
                         {%else%}
-                        <div class="level-item stonk" onclick="stonks({{painting.id}})">
+                        <div class="level-item stonk round" onclick="stonks({{painting.id}})" id="stonk{{painting.id}}">
                             <h5 class="title is-5">
                                 <i class="fas fa-chart-line fa-lg"></i> Stonks
                             </h5>
@@ -55,15 +59,17 @@
 
         {% endfor %}
     </div>
+    {%if paintings%}
     {% include "popular.html" %} {{super()}}
+    {%endif%}
 </div>
 {%if paintings%}
-<div class="pages">
+<div class="has-text-centered is-flex is-flex-direction-row is-justify-content-center">
     {%if page!=1%}
-    <a class="change_page" href="/?page={{page-2}}"><i class="fas fa-arrow-left"></i></a>
+    <a class="p-5" href="/?page={{page-2}}"><i class="fas fa-2x fa-arrow-left"></i></a>
     {%endif%}
-    <div class="current_page">Page {{page}}</div>
-    <a class="change_page" href="/?page={{page}}"><i class="fas fa-arrow-right"></i></a>
+    <div class="title is-5 mb-0 mt-5 pt-1">Page {{page}}</div>
+    <a class="p-5" href="/?page={{page}}"><i class="fas fa-2x fa-arrow-right"></i></a>
 </div>
 {%endif%}
 {% endblock %}

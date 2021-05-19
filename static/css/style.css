@@ -13,21 +13,14 @@ html,body {
     font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif;
     background-color: var(--dark);
 }
-
-nav{
-    padding: 1rem;
-    padding-left: 25%;
-}
 .navbar-item{
     margin: 0 0.5rem;
-    border-radius: var(--round);
 }
 .navbar-item:hover{
     color: var(--alternative) !important;
 }
 .about{
     margin-top: 2rem;
-    border-radius: var(--round);
     padding: 2rem !important;
 }
 .container{
@@ -36,10 +29,8 @@ nav{
 .login{
     margin: 2rem;
     padding: 1rem;
-    border-radius: var(--round);
 }
 .stonk{
-    border-radius: var(--round);
     padding: 1rem;
     cursor: pointer;
 }
@@ -62,13 +53,9 @@ nav{
 }
 .custom-file-upload:hover{
     border: 1px solid var(--darker-but-only-a-little-bit);
-
 }
 
-@media (max-width: 1024px) {
-    nav{
-        padding: 0rem;
-    }
+@media (max-width: 1000px) {
     .popular{
         display: none !important;
     }
@@ -78,5 +65,5 @@ nav{
 }
 #nothing{
     cursor: default;
-    color:#222;
+    color:rgb(218, 169, 169);
 }

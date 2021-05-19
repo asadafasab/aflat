@@ -2,7 +2,8 @@
 
 <div class="is-flex-direction-row is-flex is-justify-content-center">
     <div class="columns is-centered has-text-centered mt-4">
-        <div class='card equal-height mr-4'>
+        
+        <div class='card equal-height mr-4 pr-4'>
             {% for user in data[0] %}
             <div class="card-content is-flex is-flex-direction-row" id="{{user.username}}">
                 {%if user.username != "admin"%}
@@ -27,7 +28,7 @@
                 {%endfor%}
             </div>
         </div>
-        <div class='card equal-height'>
+        <div class='card p-4'>
             <img id="generated_img" class="p-2 post-image" style="height: 256px;" src="" alt="">
             <div id="published" class="published"></div>
             <div class="button m-3" onclick="generate_image()">

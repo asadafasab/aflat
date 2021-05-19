@@ -6,7 +6,7 @@
 {%block body %}
 <div class="is-flex-direction-row is-flex is-justify-content-center">
     <div class="columns is-centered has-text-centered">
-        <form action="/login" method="POST" class="has-background-white login">
+        <form action="/login" method="POST" class="has-background-white login round">
             <div class="column">
                 <h1 class="title">Login</h1>
             </div>
@@ -34,35 +34,28 @@
 
 
     <div class="columns is-centered has-text-centered">
-        <form id="signup_form" action="/signup" method="POST" class="has-background-white login">
+        <div class="has-background-white login round">
             <div class="column">
                 <h1 class="title">Sign up</h1>
             </div>
             <div class="column">
                 <input class="input" type="text" placeholder="Username" name="username" id="username_signup">
+                <h5 class="subtitle is-6 mt-2 has-text-danger" style="display: none;" id="msg1">Empty username</h5>
             </div>
             <div class="column">
-                <input class="input" type="text" placeholder="Username" name="username" id="username_signup">
+                <input class="input" type="password" placeholder="Password" name="password" id="password_signup1">
             </div>
             <div class="column">
-                <input class="input" type="password" placeholder="Password" name="password" id="password_signup1"
-                    onchange="checkSignupForm()">
+                <input class="input" type="password" placeholder="Repeat Password" id="password_signup2">
+                <h5 class="subtitle is-6 mt-2 has-text-danger" style="display: none;" id="msg2">Check passwords</h5>
             </div>
-            <div class="column">
-                <input class="input" type="password" placeholder="Repeat Password" id="password_signup2"
-                    onchange="checkSignupForm()">
-            </div>
-            <div class="column has-text-danger">
-                {% with messages = get_flashed_messages() %}
-                {% if messages%}
-                {{messages[0]}}
-                {%endif%}
-                {%endwith%}
+            <div class="column has-text-danger" id="message-server">
             </div>
             <div class="column">
                 <input id="signup_submit" class="button is-medium is-fullwidth" type="submit" value="Sign In" disabled>
+                <button class="button is-medium is-fullwidth" onclick="checkSignupForm()">Sign In</button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 {% endblock %}

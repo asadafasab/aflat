@@ -18,8 +18,7 @@
 </head>
 
 <body>
-
-    <nav class="navbar mb-5" role="navigation" aria-label="main navigation">
+    <nav class="navbar mb-5 p-2" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-burger" id="burger">
                 <span aria-hidden="true"></span>
@@ -42,8 +41,8 @@
 
                 <div class="navbar-item">Hi {{ current_user.username }}</div>
                 {%else%}
-                <a href="/login" class="navbar-item">Log in</a>
-                <a href="/signup" class="navbar-item">Sign up</a>
+                <a href="/login" class="navbar-item">Login</a>
+                <a href="/login" class="navbar-item">Sign up</a>
                 {%endif%}
             </div>
         </div>

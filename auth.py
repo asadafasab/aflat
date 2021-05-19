@@ -23,7 +23,7 @@ def add_comment():
     content = comment["comment"]
     id_ = comment["id"]
     if not content or not id_:
-        return jsonify({"ok": False})
+        return jsonify({"ok": False, "error":"empty comment or id of post"})
 
     user = User.query.filter_by(username=username).first()
     post = Post.query.filter_by(id=id_).first()
@@ -39,27 +39,22 @@ def login():
     return render_template("login.html")
 
 
-@auth.route("/signup")
-def signup():
-    return render_template("signup.html")
-
-
 @auth.route("/signup", methods=["POST"])
-def signup_():
-    username = request.form.get("username")
-    password = request.form.get("password")
+def signup():
+    username = request.json["username"]
+    password = request.json["password"]
+    if not username or not password:
+        return jsonify({"ok": False,"error":"Empty password or username"})
     user = User.query.filter_by(username=username).first()
     if user:
-        flash("Username taken")
-        return redirect(url_for("auth.signup"))
+        return jsonify({"ok": False,"error":"Username taken"})
 
     new_user = User(username=username, hash_password=password)
 
     db.session.add(new_user)
     db.session.commit()
-    flash("Now you can log in")
 
-    return redirect(url_for("auth.login"))
+    return jsonify({"ok": True})
 
 
 @auth.route("/login", methods=["POST"])
