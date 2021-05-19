@@ -1,36 +1,44 @@
 {%extends "base.html" %} {%block head%} {%endblock%} {%block body %}
-<div class="user_list">
-    {% for user in data[0] %}
-    <div class="user" id="{{user.username}}">
-        {%if user.username != "admin"%}
-        <div class="delete_btn" onclick="deleteUser('{{user.username}}')">
-            <i class="fas fa-user-slash"></i> DELETE
+
+<div class="is-flex-direction-row is-flex is-justify-content-center">
+    <div class="columns is-centered has-text-centered mt-4">
+        
+        <div class='card equal-height mr-4 pr-4'>
+            {% for user in data[0] %}
+            <div class="card-content is-flex is-flex-direction-row" id="{{user.username}}">
+                {%if user.username != "admin"%}
+                <div class="button" onclick="deleteUser('{{user.username}}')">
+                    <i class="fas fa-user-slash"></i> DELETE
+                </div>
+                {%endif%}
+                <div class="subtitle ml-2 mt-2">{{user.id}} {{user.username}}</div>
+            </div>
+            {%endfor%}
         </div>
-        {%endif%}
-        <div class="id">{{user.id}}</div>
-        <div class="username">{{user.username}}</div>
+
+        <div class='card equal-height mr-4'>
+            <div class="card-content has-text-left">
+                {%for comment in data[1]%}
+                <div class="username">
+                    <b>{{comment.username}}</b> {{comment.date}}
+                </div>
+                <div class="content">
+                    {{comment.content}}
+                </div>
+                {%endfor%}
+            </div>
+        </div>
+        <div class='card p-4'>
+            <img id="generated_img" class="p-2 post-image" style="height: 256px;" src="" alt="">
+            <div id="published" class="published"></div>
+            <div class="button m-3" onclick="generate_image()">
+                GENERATE
+            </div>
+            <div class="button m-3" onclick="add_new_image()">
+                PUBLISH
+            </div>
+        </div>
     </div>
-    {%endfor%}
-</div>
-<div class="comments_management">
-    {%for comment in data[1]%}
-    <div class="username">
-        <b>{{comment.username}}</b> {{comment.date}}
-    </div>
-    <div class="content">
-        {{comment.content}}
-    </div>
-    {%endfor%}
 </div>
 
-<div class="generator">
-    <img id="generated_img" src="" alt="">
-    <div id="published" class="published"></div>
-    <div class="delete_btn" onclick="generate_image()">
-        GENERATE
-    </div>
-    <div class="delete_btn" onclick="add_new_image()">
-        PUBLISH
-    </div>
-</div>
 {% endblock %}

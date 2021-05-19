@@ -59,16 +59,23 @@ def users_comments_data():
     users = User.query
     users_json = []
     for user in users.all():
-        users_json.append({"id": user.id, "username": user.username})
+        if user:
+            users_json.append({"id": user.id, "username": user.username})
 
     comments = Comment.query.all()
     comments_json = []
     for comment in reversed(comments):
+        user = users.filter_by(id=comment.user_id).first()
+        if user:
+            username = user.username
+        else:
+            username = "[deleted]"
+
         comments_json.append(
             {
                 "date": comment.date,
                 "post_id": comment.post_id,
-                "username": users.filter_by(id=comment.user_id).first().username,
+                "username": username,
                 "content": comment.content,
             }
         )

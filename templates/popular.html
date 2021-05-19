@@ -1,12 +1,11 @@
-<div class="right_bar">
-    <h2 class="bar_title">Popular</h2>
-
+<div class='column is-one-third has-background-white round has-text-centered mt-3 mb-3 popular'>
+    <h2 class="title is-3 p-3 m-0">Popular</h2>
     {%for pop in popular%}
-    <a href="/painting?id={{pop.id}}">
-        <div class="popular_painting">
-            <img alt="" src="{{url_for('static',filename=pop.filename)}}">
-            <h4 class="popular_title">{{pop.title}}</h4>
+        <div class='card equal-height mt-4'>
+            <a href="/painting?id={{pop.id}}">
+                <img class="post-image" alt="" src="{{url_for('static',filename=pop.filename)}}">
+                <h4 class="title is-5 p-1">{{pop.title}}</h4>
+            </a>
         </div>
-    </a>
     {%endfor%}
 </div>
