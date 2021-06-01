@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aflat-service
+spec:
+  selector:
+    app: aflat
+  ports:
+  - protocol: "TCP"
+    port: 6000
+    targetPort: 7777
+  type: LoadBalancer
+
+
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: aflat
+spec:
+  replicas: 4
+  template:
+    metadata:
+      labels:
+        app: aflat
+    spec:
+      containers:
+      - name: aflat
+        image: aflat:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 7777

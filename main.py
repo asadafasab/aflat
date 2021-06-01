@@ -8,8 +8,8 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
 
-    app.config["SECRET_KEY"] = "TODO secret key here"  # TODO
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///main.db"
+    app.config["SECRET_KEY"] = "TODO_to_replace"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///holy.db"
 
     db.init_app(app)
 

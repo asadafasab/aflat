@@ -2,6 +2,7 @@ from typing import List, Dict
 from hashlib import md5
 import random
 import os
+import pathlib
 import torch
 import matplotlib.pyplot as plt
 
@@ -15,9 +16,16 @@ from aflat.main import db
 from aflat.models import User, Comment, Post, PostScore
 
 
+absolute_path = str(pathlib.Path().absolute())
+model_path = "./gan/generator.pth"
+print(absolute_path)
+if "aflat" not in absolute_path:
+    absolute_path = os.path.join(absolute_path, "aflat")
+    model_path = os.path.join(absolute_path, "gan/generator.pth")
+
 gen = Generator(512, 512)
 gen.load_state_dict(
-    torch.load("./gan/generator.pth", map_location=torch.device("cpu"))["state_dict"]
+    torch.load(model_path, map_location=torch.device("cpu"))["state_dict"]
 )
 
 TITLES = [
@@ -37,7 +45,7 @@ TITLES = [
     "Zombie painting is better than sleeping",
 ]
 EXTENSIONS = ["png", "jpg", "jpeg", "git", "avif"]
-POSTS_PATH = "./static/generated/"
+POSTS_PATH = absolute_path + "/static/generated/"
 
 
 def comments_data(id_: int) -> List[Dict]:
@@ -113,22 +121,27 @@ def new_painting():
     noise = torch.randn(1, 512, 1, 1, dtype=torch.float32)
     with torch.no_grad():
         img = gen.forward(noise, 1, 6) * 0.5 + 0.5
-
-    plt.imsave("./static/generated/tmp.jpg", img[0].permute(1, 2, 0).numpy())
+    plt.imsave(os.path.join(POSTS_PATH, "tmp.jpg"), img[0].permute(1, 2, 0).numpy())
 
 
 def publish_painting():
     post = Post.query.order_by(Post.id.desc()).first()
     user = User.query.filter_by(username=current_user.username).first()
     if post:
-        os.rename("./static/generated/tmp.jpg", f"./static/generated/{post.id+1}.jpg")
+        os.path.join(POSTS_PATH, "tmp.jpg")
+        os.rename(
+            os.path.join(POSTS_PATH, "tmp.jpg"),
+            os.path.join(POSTS_PATH, f"{post.id+1}.jpg"),
+        )
         new_post = Post(
             title=random.choice(TITLES),
             picture_filename=f"/generated/{post.id+1}.jpg",
             user_post=user,
         )
     else:
-        os.rename("./static/generated/tmp.jpg", "./static/generated/1.jpg")
+        os.rename(
+            os.path.join(POSTS_PATH, "tmp.jpg"), os.path.join(POSTS_PATH, "1.jpg")
+        )
         new_post = Post(
             title=random.choice(TITLES),
             picture_filename="/generated/1.jpg",
@@ -148,10 +161,10 @@ def new_filename(fn, file):
 
 
 def generated_directory():
-    if os.path.isdir("./static/generated/"):
+    if os.path.isdir(POSTS_PATH):
         return True
     try:
-        os.mkdir("./static/generated")
+        os.mkdir(POSTS_PATH)
     except:
         return False
     return True
